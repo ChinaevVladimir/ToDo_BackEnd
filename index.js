@@ -1,5 +1,4 @@
 const express = require("express");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const app = express();
 const cors = require("cors");
@@ -13,7 +12,6 @@ const uri =
   "mongodb+srv://root:root@cluster0.9u3oi.mongodb.net/myFirstDatabase?retryWrites=true&w=majority";
 mongoose.connect(uri, {});
 
-app.use(bodyParser.json());
 app.use("/", apiRoutes);
 
 app.listen(7070, () => console.log("Example app listening on port 7070!"));
