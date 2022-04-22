@@ -15,34 +15,23 @@ mongoose.connect(uri, {});
 
 const Task = mongoose.model("tasks", taskScheme);
 
-app.get("/allTasks", (req, res) => {
-  Task.find().then((result) => {
-    res.send({ data: result });
-  });
-});
+app.get("/allTasks", (req, res) =>
+  Task.find().then((result) => res.send({ data: result }))
+);
 
 app.post("/createTasks", (req, res) => {
   const task = new Task(req.body);
-  console.log(req.body);
-  task.save().then((result) => {
-    res.send(result);
-  });
+  task.save().then((result) => res.send(result));
 });
 
 app.patch("/updateTask", (req, res) => {
-  Task.updateOne({ _id: req.query.id }, req.body).then((result) => {
-    Task.find({ _id: req.body.id }).then((result) => {
-      res.send(result);
-    });
-  });
+  Task.updateOne({ _id: req.query.id }, req.body).then((result) =>
+    Task.find({ _id: req.body.id }).then((result) => res.send(result))
+  );
 });
 
-app.delete("/deleteTasks", (req, res) => {
-  Task.deleteOne({ _id: req.query.id }).then((result) => {
-    res.send(result);
-  });
-});
+app.delete("/deleteTasks", (req, res) =>
+  Task.deleteOne({ _id: req.query.id }).then((result) => res.send(result))
+);
 
-app.listen(7070, () => {
-  console.log("Example app listening on port 7070!");
-});
+app.listen(7070, () => console.log("Example app listening on port 7070!"));
