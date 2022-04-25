@@ -6,7 +6,7 @@ module.exports.getAllTasks = (req, res) =>
 module.exports.createNewTask = (req, res) => {
   const body = req.body;
   if (!(body.hasOwnProperty("text") && body.hasOwnProperty("isCheck"))) {
-    res.send("add text or isCheck please!");
+    res.status(422).send("add text or isCheck please!");
   } else {
     const task = new Task(req.body);
     task
@@ -19,20 +19,21 @@ module.exports.createNewTask = (req, res) => {
 
 module.exports.changeTaskInfo = (req, res) => {
   const body = req.body;
-  console.log(req.body);
-  console.log(req.body._id);
-  if (
-    !(
-      body.hasOwnProperty("_id") &&
-      (body.hasOwnProperty("text") || body.hasOwnProperty("isCheck"))
-    )
-  ) {
-    res.send("add value please!");
-  } else {
-    console.log(req.body.isCheck);
-    Task.updateOne({ _id: req.body._id }, req.body).then((result) =>
-      Task.find().then((result) => res.send({ data: result }))
-    );
+  try {
+    if (
+      !(
+        body.hasOwnProperty("_id") &&
+        (body.hasOwnProperty("text") || body.hasOwnProperty("isCheck"))
+      )
+    ) {
+      res.status(422).send("add value please!");
+    } else {
+      Task.updateOne({ _id: body._id }, body).then((result) =>
+        Task.find().then((result) => res.send({ data: result }))
+      );
+    }
+  } catch (err) {
+    res.status(err).send(err);
   }
 };
 
